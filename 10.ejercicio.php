@@ -5,50 +5,48 @@ mostrar: LA SUMATORIA DE LOS VALORES, EL VALOR DEL
 PROMEDIO, CUÁNTOS VALORES FUERON DIGITADOS, MAYOR
 VALOR Y MENOR VALOR.-->
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+	<title>Formulario final porfin vamoos</title>
 </head>
 <body>
-<form method="post" action="10.ejercicio.php">
-  <label for="valor">Ingrese un valor:</label>
-  <input type="number" name="valor" id="valor">
-  <button type="submit">Agregar</button>
-</form>
+	<h1>Programa Finall</h1>
+	<form method="POST" action="10.ejercicio.php">
+    <p>Nota: Al ingresar numeros se pueden seguir añadiendo incluso tras oprimir "Agregar numero", nada de lo puesto anteriormente se borrará, sin embargo, en caso de querer limpiar todos los datos, se puede oprimir el botón de "Limpiar datos" para volver a ingresar valores desde 0, sin que haya nada almacenado.</p>
+		<label for="numero">Ingrese un número:</label>
+		<input type="number" id="numero" name="numero">
+		<input type="submit" name="accion" value="Agregar número"><br><br>
+    <label > Mostrar resultados de numeros enviados</label>
+		<input type="submit" name="accion" value="Mostrar resultados"><br><br>
+    <label>Limpiar datos:</label>
+    <button><a href="./11.redireccion.php">Limpiar datos</a></button>
+	</form>
 </body>
 </html>
-<?php
-if ($_POST){
-  $valores = array();
-  $total_valores = 0;
-  $promedio = 0;
-  $cantidad_valores = 0;
-  $mayor_valor = 0;
-  $menor_valor = 0;
-  
-  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+		<?php
+			session_start();
+			if (isset($_POST["accion"])) {
+				if ($_POST["accion"] == "Agregar número") {
+					$numero = $_POST["numero"];
+					if ($numero != 0) {
+						array_push($_SESSION["numeros"], $numero);
+					}
+				} else if ($_POST["accion"] == "Mostrar resultados") {
+					$numeros = $_SESSION["numeros"];
+					$suma = array_sum($numeros);
+					$promedio = count($numeros) > 0 ? $suma / count($numeros) : 0;
+					$mayor = max($numeros);
+					$menor = min($numeros);
+					$contador = count($numeros);
 
-    $valor = $_POST["valor"];
-    
-    if ($valor == 0) {
-      $total_valores = array_sum($valores);
-      $cantidad_valores = count($valores);
-      $promedio = $total_valores / $cantidad_valores;
-      $mayor_valor = max($valores);
-      $menor_valor = min($valores);
-    } else {
-      $valores[] = $valor;
-    }
-  }
-  if ($cantidad_valores > 0) {
-    echo "<p>La sumatoria de los valores es: {$total_valores}</p>";
-    echo "<p>El valor del promedio es: {$promedio}</p>";
-    echo "<p>La cantidad de valores ingresados es: {$cantidad_valores}</p>";
-    echo "<p>El mayor valor ingresado es: {$mayor_valor}</p>";
-    echo "<p>El menor valor ingresado es: {$menor_valor}</p>";
-  }
-}
-?>
+					echo "<h2>Resultados:</h2>";
+					echo "<p>La sumatoria de los valores es: {$suma}</p>";
+					echo "<p>El valor del promedio es: {$promedio}</p>";
+					echo "<p>Se ingresaron {$contador} valores</p>";
+					echo "<p>El mayor valor es: {$mayor}</p>";
+					echo "<p>El menor valor es: {$menor}</p>";
+				}
+			} else {
+				$_SESSION["numeros"] = [];
+			}
+		?>
