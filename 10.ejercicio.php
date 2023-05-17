@@ -15,26 +15,28 @@ VALOR Y MENOR VALOR.-->
     <p>Nota: Al ingresar numeros se pueden seguir añadiendo incluso tras oprimir "Agregar numero", nada de lo puesto anteriormente se borrará, sin embargo, en caso de querer limpiar todos los datos, se puede oprimir el botón de "Limpiar datos" para volver a ingresar valores desde 0, sin que haya nada almacenado.</p>
 		<label for="numero">Ingrese un número:</label>
 		<input type="number" id="numero" name="numero">
-		<input type="submit" name="accion" value="Agregar número"><br><br>
+		<input type="submit" name="ejecutar" value="Agregar número"><br><br>
     <label > Mostrar resultados de numeros enviados</label>
-		<input type="submit" name="accion" value="Mostrar resultados"><br><br>
+		<input type="submit" name="ejecutar" value="Mostrar resultados"><br><br>
     <label>Limpiar datos:</label>
     <button><a href="./11.redireccion.php">Limpiar datos</a></button>
 	</form>
 </body>
 </html>
 		<?php
-			session_start();
-			if (isset($_POST["accion"])) {
-				if ($_POST["accion"] == "Agregar número") {
+			session_start(); //inicio de sesion, almacenamiento para el usuario
+			 //isset verifica que el formulario se haya iniciado, que no sea nulo o indefinido
+			if (isset($_POST["ejecutar"])) {
+				if ($_POST["ejecutar"] == "Agregar número") {
 					$numero = $_POST["numero"];
-					if ($numero != 0) {
-						array_push($_SESSION["numeros"], $numero);
+					if ($numero != 0) { 
+						//$_session variable que se usa para almacenar datos en el web server(config, preferencias, detalles de login) 
+						array_push($_SESSION["numeros"], $numero); 
 					}
-				} else if ($_POST["accion"] == "Mostrar resultados") {
-					$numeros = $_SESSION["numeros"];
+				} else if ($_POST["ejecutar"] == "Mostrar resultados") {
+					$numeros = $_SESSION["numeros"]; //$_SESSION["numeros"] = [10, 20]
 					$suma = array_sum($numeros);
-					$promedio = count($numeros) > 0 ? $suma / count($numeros) : 0;
+					$promedio = count($numeros) > 0 ? $suma / count($numeros) : 0; //if (?) y else (:)
 					$mayor = max($numeros);
 					$menor = min($numeros);
 					$contador = count($numeros);
@@ -47,6 +49,6 @@ VALOR Y MENOR VALOR.-->
 					echo "<p>El menor valor es: {$menor}</p>";
 				}
 			} else {
-				$_SESSION["numeros"] = [];
+				$_SESSION["numeros"] = []; 
 			}
 		?>
